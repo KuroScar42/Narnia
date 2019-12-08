@@ -38,18 +38,18 @@ namespace Narnia {
             mat = new Celda[laberintoSize, laberintoSize];
             camino = new Stack<Celda>();
             randGen = new Random();
-            Llenar();
+            //Iniciar();
         }
 
         private void JuegoView_Load(object sender, EventArgs e) {
-            Llenar();
+            //Iniciar();
         }
 
         private int GetRandNum(int max) {
             return randGen.Next(1, max);
         }
 
-        private void Llenar() {
+        private void Iniciar() {
             camino.Clear();
             for (int i = 0;i < laberintoSize;i++) {
                 for (int j = 0;j < laberintoSize;j++) {
@@ -57,18 +57,14 @@ namespace Narnia {
                     int numX = i * casillaSize;
                     int numY = j * casillaSize;
                     mat[i, j] = celda;
-                    dibujarParedes(celda);
-                    //tablero.DrawLine(lapiz, numX, numY, numX, numY + casillaSize); ya
-                    //tablero.DrawLine(lapiz, numX, numY, numX + casillaSize, numY); ya 
-                    //tablero.DrawLine(lapiz, numX + casillaSize, numY + casillaSize, numX + casillaSize, numY); ya 
-                    //tablero.DrawLine(lapiz, numX + casillaSize, numY + casillaSize, numX , numY + casillaSize);
-                    tablero.FillRectangle(new SolidBrush(Color.Black), 0, 0, 10, 10);
-                    //pBoxTablero.Controls.Add(celda);
+                    //dibujarParedes(celda);
                 }
             }
             Celda inicio = mat[0, 0];
             inicio.Visitada = true;
             camino.Push(inicio);
+            CrearLaberinto();
+            dibujarLaberinto();
         }
 
         private void dibujarParedes(Celda celda) {
@@ -117,8 +113,7 @@ namespace Narnia {
         }
 
         private void button1_Click_1(object sender, EventArgs e) {
-            //tablero.FillRectangle(new SolidBrush(Color.Black), 0, 0, 10, 10);
-            Llenar();
+            Iniciar();
         }
 
         private void timer1_Tick(object sender, EventArgs e) {
@@ -126,16 +121,10 @@ namespace Narnia {
         }
 
         private void button2_Click(object sender, EventArgs e) {
-            Laberinto();
             tablero.Clear(Color.White);
-            for (int i = 0;i < laberintoSize;i++) {
-                for (int j = 0;j < laberintoSize;j++) {
-                    dibujarParedes(mat[i, j]);
-                }
-            }
         }
 
-        public void Laberinto() {
+        public void CrearLaberinto() {
             
             while (camino.Count > 0) {
                 Celda actual = camino.Peek();
@@ -205,6 +194,15 @@ namespace Narnia {
                 }
                 if (!valid) {
                     camino.Pop();
+                }
+            }
+        }
+
+        private void dibujarLaberinto() {
+            tablero.Clear(Color.White);
+            for (int i = 0;i < laberintoSize;i++) {
+                for (int j = 0;j < laberintoSize;j++) {
+                    dibujarParedes(mat[i, j]);
                 }
             }
         }
