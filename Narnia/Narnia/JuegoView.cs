@@ -16,30 +16,47 @@ namespace Narnia {
         Graphics tablero;
         Pen lapiz;
         Celda[,] mat;
+        Random randGen;
 
-        
+        Stack<Celda> camino;
+
+        unsafe struct nodo {
+            int num;
+            nodo* sig;
+            
+            nodo(int num, nodo* sig) {
+                this.num = num;
+                this.sig = sig;
+            }
+        }
+
+
         public JuegoView() {
             InitializeComponent();
             tablero = pBoxTablero.CreateGraphics();
             lapiz = new Pen(Color.Black);
-            mat = new Celda [laberintoSize, laberintoSize] ;
+            mat = new Celda[laberintoSize, laberintoSize];
+            camino = new Stack<Celda>();
+            randGen = new Random();
             Llenar();
         }
 
         private void JuegoView_Load(object sender, EventArgs e) {
             Llenar();
         }
-        private void Llenar() {
-            //Graphics tablero;
-            //tablero = pBoxTablero.CreateGraphics();
-            //
 
-            for (int i = 0;i < laberintoSize;i++){
-                for (int j = 0;j < laberintoSize;j++){
+        private int GetRandNum(int max) {
+            return randGen.Next(1, max);
+        }
+
+        private void Llenar() {
+            camino.Clear();
+            for (int i = 0;i < laberintoSize;i++) {
+                for (int j = 0;j < laberintoSize;j++) {
                     Celda celda = CrearBoton((i * casillaSize), (j * casillaSize));
                     int numX = i * casillaSize;
                     int numY = j * casillaSize;
-                    mat[i,j] = celda;
+                    mat[i, j] = celda;
                     dibujarParedes(celda);
                     //tablero.DrawLine(lapiz, numX, numY, numX, numY + casillaSize); ya
                     //tablero.DrawLine(lapiz, numX, numY, numX + casillaSize, numY); ya 
@@ -49,6 +66,9 @@ namespace Narnia {
                     //pBoxTablero.Controls.Add(celda);
                 }
             }
+            Celda inicio = mat[0, 0];
+            inicio.Visitada = true;
+            camino.Push(inicio);
         }
 
         private void dibujarParedes(Celda celda) {
@@ -64,7 +84,7 @@ namespace Narnia {
             if (celda.paredSur) {
                 tablero.DrawLine(lapiz, celda.PosX + casillaSize, celda.PosY + casillaSize, celda.PosX, celda.PosY + casillaSize);
             }
-            
+
 
         }
         private void AjustarTamano(int tamano, int laberSize) {
@@ -72,16 +92,14 @@ namespace Narnia {
         }
 
         private Label CrearLabel(int x, int y, int i) {
-            Label lbl1 = new Label
-            {
+            Label lbl1 = new Label {
                 Text = "nel" + i,
                 Location = new Point(x, y),
                 ForeColor = Color.Blue,
                 BackColor = Color.Transparent
 
             };
-            lbl1.Click += (s, e) =>
-            {
+            lbl1.Click += (s, e) => {
                 Console.WriteLine(s.ToString());
             };
             lbl1.AutoSize = true;
@@ -91,16 +109,8 @@ namespace Narnia {
         private Celda CrearBoton(int x, int y) {
             //Button btn = new Button
             Celda btn = new Celda {
-                Text = "Botón " + x / casillaSize + " " + y / casillaSize,
-                Location = new Point(x, y),
-                Size = new Size(50, 50),
                 PosX = x,
                 PosY = y
-                //AutoSize = true
-            };
-            btn.Click += (s, e) =>
-            {
-                Console.WriteLine(((Celda)s).Text);
             };
 
             return btn;
@@ -116,11 +126,85 @@ namespace Narnia {
         }
 
         private void button2_Click(object sender, EventArgs e) {
-            mat[0, 0].paredOeste = false;
+            Laberinto();
             tablero.Clear(Color.White);
             for (int i = 0;i < laberintoSize;i++) {
                 for (int j = 0;j < laberintoSize;j++) {
                     dibujarParedes(mat[i, j]);
+                }
+            }
+        }
+
+        public void Laberinto() {
+            
+            while (camino.Count > 0) {
+                Celda actual = camino.Peek();
+                bool valid = false;
+                int checks = 0;
+                while(!valid && checks < 10) {
+                    checks++;
+                    int direccion = GetRandNum(5);
+                    switch (direccion) {
+                        // Norte
+                        case 1:
+                            if ((actual.PosY / casillaSize) - 1 >= 0) {
+                                Celda siguiente = mat[actual.PosX / casillaSize, (actual.PosY / casillaSize) - 1];
+                                if (!siguiente.Visitada) {
+                                    siguiente.paredSur = false;
+                                    actual.paredNorte = false;
+                                    //mat[actual.PosX / casillaSize, actual.PosY / casillaSize - 1] = siguiente;
+                                    //mat[actual.PosX / casillaSize, actual.PosY / casillaSize ] = actual;
+                                    siguiente.Visitada = true;
+                                    camino.Push(siguiente);
+                                    valid = true;
+                                }
+                            }
+                            break;
+                        // Este   
+                        case 2:
+                            if ((actual.PosX / casillaSize) + 1 < (laberintoSize)) {
+                                Celda siguiente = mat[(actual.PosX / casillaSize) + 1, actual.PosY / casillaSize];
+                                if (!siguiente.Visitada) {
+                                    siguiente.paredOeste = false;
+                                    actual.paredEste = false;
+                                    siguiente.Visitada = true;
+                                    camino.Push(siguiente);
+                                    valid = true;
+                                }
+                            }
+                            break;
+                        // Oeste
+                        case 3:
+                            if ((actual.PosX / casillaSize) - 1 >= 0) {
+                                Celda siguiente = mat[(actual.PosX / casillaSize) - 1, actual.PosY / casillaSize];
+                                if (!siguiente.Visitada) {
+                                    siguiente.paredEste = false;
+                                    actual.paredOeste = false;
+                                    siguiente.Visitada = true;
+                                    camino.Push(siguiente);
+                                    valid = true;
+                                }
+                            }
+                            break;
+                        // Sur
+                        case 4:
+                            if ((actual.PosY / casillaSize) + 1 < (laberintoSize)) {
+                                Celda siguiente = mat[actual.PosX / casillaSize, (actual.PosY / casillaSize) + 1];
+                                if (!siguiente.Visitada) {
+                                    siguiente.paredNorte = false;
+                                    actual.paredSur = false;
+                                    siguiente.Visitada = true;
+                                    camino.Push(siguiente);
+                                    valid = true;
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (!valid) {
+                    camino.Pop();
                 }
             }
         }

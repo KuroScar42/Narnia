@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Narnia {
-    class Celda : Button {
+    class Celda {
         // los siguientes 4 parametros son utilizados para identificar en cada
         // celda cuales de la paredes se van a utilizar para formar el laberinto
         // como tal
@@ -40,5 +40,7 @@ namespace Narnia {
 
         public int PosX { get => posX; set => posX = value; }
         public int PosY { get => posY; set => posY = value; }
+
+        public Boolean Visitada { get => visitada; set => visitada = value; }
     }
 }
