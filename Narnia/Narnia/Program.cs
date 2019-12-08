@@ -13,7 +13,7 @@ namespace Narnia {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new JuegoView());
+            Application.Run(new JuegoForm());
         }
     }
 }

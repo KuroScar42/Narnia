@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Narnia {
-    public partial class JuegoView : Form {
-        private int contador = 0;
+    public partial class JuegoForm : Form {
         private readonly int laberintoSize = 5;
         private readonly int casillaSize = 50;
         Graphics tablero;
@@ -21,24 +20,40 @@ namespace Narnia {
         Stack<Celda> camino;
 
         unsafe struct nodo {
-            int num;
-            nodo* sig;
+            public int num;
+            public nodo* sig;
             
-            nodo(int num, nodo* sig) {
+            public nodo(int num, nodo* sig) {
                 this.num = num;
                 this.sig = sig;
             }
         }
 
 
-        public JuegoView() {
+        public JuegoForm() {
             InitializeComponent();
             tablero = pBoxTablero.CreateGraphics();
             lapiz = new Pen(Color.Black);
             mat = new Celda[laberintoSize, laberintoSize];
             camino = new Stack<Celda>();
             randGen = new Random();
+            pBoxTablero.SizeChanged += PBoxTablero_SizeChanged;
+            pBoxTablero.Size = new Size(laberintoSize * casillaSize + 1, laberintoSize * casillaSize + 1);
+            this.Size = new Size(laberintoSize * casillaSize + 25, laberintoSize * casillaSize + 119);
+            panel1.BackColor = Color.Aqua;
             //Iniciar();
+        }
+
+        unsafe nodo* AgregarLista(nodo* ini, int numero) {
+            if (ini == null) {
+                ini = new nodo(5, null);
+            }
+            return null;
+        }
+
+        private void PBoxTablero_SizeChanged(object sender, EventArgs e) {
+            //button1.Location = new Point(pBoxTablero.Size.Width + 18, 12);
+            //button2.Location = new Point(pBoxTablero.Size.Width + 18, 12);
         }
 
         private void JuegoView_Load(object sender, EventArgs e) {
