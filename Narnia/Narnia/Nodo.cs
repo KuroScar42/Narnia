@@ -8,22 +8,22 @@ namespace Narnia
 {
     class Nodo{
         private Nodo sig;
-        private Celda celda;
+        private Fila fila;
 
-        public Nodo(Nodo sig,Celda celda)
+        public Nodo(Nodo sig,Fila fila)
         {
             this.sig = sig;
-            this.celda = celda;
+            this.fila = fila;
         }
 
-        public Fila llenarColumna(Fila cabeza, Celda celda)
+        public Nodo llenarColumna(Nodo cabeza, Fila fila)
         {
-            Fila aux;
+            Nodo aux;
             aux = cabeza;
 
             if (cabeza == null)
             {
-                cabeza = new Fila(null, celda);
+                cabeza = new Nodo(null, fila);
             }
             else
             {
@@ -31,8 +31,28 @@ namespace Narnia
                 {
                     aux = aux.sig;
                 }
-                aux.sig = new Fila(null, celda);
+                aux.sig = new Nodo(null, fila);
 
+            }
+            return cabeza;
+        }
+
+        public Nodo asignarNodo(Nodo cabeza,Fila ini)
+        {
+            Nodo aux = cabeza;
+
+            if (cabeza == null)
+            {
+                Console.WriteLine("No hay lista");
+            }
+            else
+            {
+                while (aux.sig != null)
+                {
+                    aux = aux.sig;
+                }
+
+                aux.fila=ini;
             }
             return cabeza;
         }
