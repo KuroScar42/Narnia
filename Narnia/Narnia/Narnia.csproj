@@ -57,8 +57,10 @@
     <Compile Include="JuegoView.Designer.cs">
       <DependentUpon>JuegoView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Personaje.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Raton.cs" />
     <EmbeddedResource Include="JuegoView.resx">
       <DependentUpon>JuegoView.cs</DependentUpon>
     </EmbeddedResource>
