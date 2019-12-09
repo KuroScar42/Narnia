@@ -10,8 +10,8 @@ using System.Windows.Forms;
 
 namespace Narnia {
     public partial class JuegoForm : Form {
-        private readonly int laberintoSize = 5;
-        private readonly int casillaSize = 50;
+        private readonly int laberintoSize = 20;
+        private readonly int casillaSize = 15;
         Graphics tablero;
         Pen lapiz;
         Celda[,] mat;
@@ -29,7 +29,6 @@ namespace Narnia {
             }
         }
 
-
         public JuegoForm() {
             InitializeComponent();
             tablero = pBoxTablero.CreateGraphics();
@@ -40,16 +39,16 @@ namespace Narnia {
             pBoxTablero.SizeChanged += PBoxTablero_SizeChanged;
             pBoxTablero.Size = new Size(laberintoSize * casillaSize + 1, laberintoSize * casillaSize + 1);
             this.Size = new Size(laberintoSize * casillaSize + 25, laberintoSize * casillaSize + 119);
-            panel1.BackColor = Color.Aqua;
+            panel1.BackColor = Color.Aquamarine;
             //Iniciar();
         }
 
-        unsafe nodo* AgregarLista(nodo* ini, int numero) {
-            if (ini == null) {
-                ini = new nodo(5, null);
-            }
-            return null;
-        }
+        //unsafe nodo* AgregarLista(nodo* ini, int numero) {
+        //    if (ini == null) {
+        //        ini = new nodo(5, null);
+        //    }
+        //    return null;
+        //}
 
         private void PBoxTablero_SizeChanged(object sender, EventArgs e) {
             //button1.Location = new Point(pBoxTablero.Size.Width + 18, 12);
