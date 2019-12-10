@@ -16,7 +16,6 @@ namespace Narnia {
         Graphics tablero;
         Pen lapiz;
         Random randGen;
-
         Pila<Celda> camino;
 
         unsafe struct nodo {
@@ -234,10 +233,7 @@ namespace Narnia {
         }
 
         private void button2_Click(object sender, EventArgs e) {
-            tablero.Clear(Color.White);
-            Celda celda = getDato(5, 4);
-            Console.WriteLine(celda.PosX + " " + celda.PosY);
-            pBoxTablero.Controls.Add(new Button());
+            //tablero.Clear(Color.White);
         }
 
         public void CrearLaberinto() {
