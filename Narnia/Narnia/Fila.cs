@@ -8,8 +8,11 @@ namespace Narnia
 {
     class Fila
     {
-        private Fila sig;
+        private Fila sig=null;
         private Celda celda;
+
+            internal Fila Sig { get => sig; set => sig = value; }
+            internal Celda Celda { get => celda; set => celda = value; }
 
         public Fila(Fila sig, Celda celda)
         {

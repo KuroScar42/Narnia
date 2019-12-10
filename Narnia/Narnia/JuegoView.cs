@@ -10,8 +10,9 @@ using System.Windows.Forms;
 
 namespace Narnia {
     public partial class JuegoForm : Form {
-        private readonly int laberintoSize = 20;
+        private readonly int laberintoSize = 6;
         private readonly int casillaSize = 15;
+        Nodo cabeza = null;
         Graphics tablero;
         Pen lapiz;
         Celda[,] mat;
@@ -22,6 +23,7 @@ namespace Narnia {
         unsafe struct nodo {
             public int num;
             public nodo* sig;
+
             
             public nodo(int num, nodo* sig) {
                 this.num = num;
@@ -40,6 +42,8 @@ namespace Narnia {
             pBoxTablero.Size = new Size(laberintoSize * casillaSize + 1, laberintoSize * casillaSize + 1);
             this.Size = new Size(laberintoSize * casillaSize + 25, laberintoSize * casillaSize + 119);
             panel1.BackColor = Color.Aquamarine;
+
+
             //Iniciar();
         }
 
@@ -56,7 +60,100 @@ namespace Narnia {
         }
 
         private void JuegoView_Load(object sender, EventArgs e) {
+            for (int i = 0; i < laberintoSize; i++)
+            {
+                Fila ini = new Fila();
+                for (int j = 0; j < laberintoSize; j++)
+                {
+                    ini = ini.llenarFila(ini, new Celda());
+                }
+                ini = ini.Sig;
+                cabeza = llenarNodo(cabeza, ini);
+            }
             //Iniciar();
+        }
+
+        Nodo llenarNodo(Nodo cabeza, Fila fila)
+        {
+            Nodo aux;
+            aux = cabeza;
+
+            if (cabeza == null)
+            {
+                cabeza = new Nodo(null, fila);
+            }
+            else
+            {
+                while (aux.Sig != null)
+                {
+                    aux = aux.Sig;
+                }
+                aux.Sig = new Nodo(null, fila);
+
+            }
+            return cabeza;
+        }
+
+        Nodo asignarNodo(Nodo cabeza, Fila ini)
+        {
+            Nodo aux = cabeza;
+
+            if (cabeza == null)
+            {
+                Console.WriteLine("No hay lista");
+            }
+            else
+            {
+                while (aux.Sig != null)
+                {
+                    aux = aux.Sig;
+                }
+
+                aux.Fila = ini;
+            }
+            return cabeza;
+        }
+
+        void setDato(int fila, int columna, Celda celda)
+        {
+            Nodo aux = cabeza;
+            int f = 0, c = 0;
+            while (aux != null)
+            {
+                Fila filaC = aux.Fila;
+                c = 0;
+                while (filaC != null)
+                {
+                    if (f == fila && c == columna)
+                    {
+                        filaC.Celda= celda;
+
+                    }
+                    c++;
+                    filaC = filaC.Sig;
+                }
+                f++;
+                aux = aux.Sig;
+            }
+        }
+
+
+        void imprimirLista()
+        {
+            Nodo aux = cabeza;
+
+            while (aux != null)
+            {
+                Fila aux2 = aux.Fila;
+                while (aux2 != null)
+                {
+                    Console.WriteLine(" "+aux2.Celda.PosX+" "+aux2.Celda.PosY);
+                    aux2 = aux2.Sig;
+                }
+                Console.WriteLine("");
+                Console.WriteLine("");
+                aux = aux.Sig;
+            }
         }
 
         private int GetRandNum(int max) {
@@ -139,7 +236,18 @@ namespace Narnia {
         }
 
         public void CrearLaberinto() {
-            
+            int fila = laberintoSize;
+            int columna = laberintoSize;
+
+            for (int i = 0; i < fila; i++)
+            {
+                for (int j = 0; j < columna; j++)
+                {
+                    setDato(i, j, new Celda(i, j));
+                }
+            }
+            imprimirLista();
+
             while (camino.Count > 0) {
                 Celda actual = camino.Peek();
                 bool valid = false;
