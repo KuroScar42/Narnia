@@ -48,7 +48,7 @@ namespace Narnia {
             for (int i = 0;i < numRatones;i++) {
                 num = r.Next(0, nombres.Count);
                 string nombre = nombres[num];
-                ratones.Push(new Raton(nombre,casillaSize, this.Location));
+                ratones.Push(new Raton(nombre,casillaSize));
                 nombres.RemoveAt(num);
                 Console.WriteLine(nombre + " " + nombres.Count);
             }

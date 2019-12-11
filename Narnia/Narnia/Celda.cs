@@ -21,19 +21,23 @@ namespace Narnia {
         private int posX;
         private int posY;
 
+        private Personaje personaje;
+        private Boolean salida;
+
         public Celda() {
             paredNorte = true;
             paredEste = true;
             paredOeste = true;
             paredSur = true;
             visitada = false;
+            salida = false;
         }
-        public Celda(int x, int y) {
-            paredNorte = true;
-            paredEste = true;
-            paredOeste = true;
-            paredSur = true;
-            visitada = false;
+        public Celda(int x, int y) :this(){
+            //paredNorte = true;
+            //paredEste = true;
+            //paredOeste = true;
+            //paredSur = true;
+            //visitada = false;
             this.PosX = x;
             this.PosY = y;
         }
@@ -42,5 +46,6 @@ namespace Narnia {
         public int PosY { get => posY; set => posY = value; }
 
         public Boolean Visitada { get => visitada; set => visitada = value; }
+        internal Personaje Personaje { get => personaje; set => personaje = value; }
     }
 }
