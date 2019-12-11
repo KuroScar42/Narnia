@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,50 +11,43 @@ using System.Windows.Forms;
 
 namespace Narnia {
     public partial class JuegoForm : Form {
-        private readonly int laberintoSize = 20;
-        private readonly int casillaSize = 12;
+        private readonly int laberintoSize = 9;
+        private readonly int casillaSize = 50;
+        private readonly int lapizWidth = 5;
         Nodo cabeza = null;
+        // variables para dibujar
         Graphics tablero;
         Pen lapiz;
         Random randGen;
-        Pila<Celda> camino;
+        Pila<Celda> camino; // es para crear el camino dentro del laberinto
 
-        unsafe struct nodo {
-            public int num;
-            public nodo* sig;
-
-
-            public nodo(int num, nodo* sig) {
-                this.num = num;
-                this.sig = sig;
-            }
-        }
+        Bruja bruja;
+        Ropero ropero;
+        Leon leon;
 
         public JuegoForm() {
             InitializeComponent();
+            // se inicializan variables
             tablero = pBoxTablero.CreateGraphics();
-            lapiz = new Pen(Color.Black);
+            lapiz = new Pen(Color.FromKnownColor(KnownColor.YellowGreen));
+            lapiz.Width = lapizWidth;
             camino = new Pila<Celda>();
             randGen = new Random();
+            bruja = new Bruja();
+            ropero = new Ropero(5);
+            leon = new Leon();
+            // se añaden algunas caractristicas
             pBoxTablero.SizeChanged += PBoxTablero_SizeChanged;
-            pBoxTablero.Size = new Size(laberintoSize * casillaSize + 1, laberintoSize * casillaSize + 1);
-            this.Size = new Size(laberintoSize * casillaSize + 25, laberintoSize * casillaSize + 119);
-            panel1.BackColor = Color.Aquamarine;
+            pBoxTablero.Size = new Size(laberintoSize * casillaSize, laberintoSize * casillaSize + 1);
+            this.Size = new Size(laberintoSize * casillaSize + 144, laberintoSize * casillaSize + 65);
 
 
-            //Iniciar();
+            panel1.BackColor = Color.Transparent;
         }
 
-        //unsafe nodo* AgregarLista(nodo* ini, int numero) {
-        //    if (ini == null) {
-        //        ini = new nodo(5, null);
-        //    }
-        //    return null;
-        //}
-
         private void PBoxTablero_SizeChanged(object sender, EventArgs e) {
-            //button1.Location = new Point(pBoxTablero.Size.Width + 18, 12);
-            //button2.Location = new Point(pBoxTablero.Size.Width + 18, 12);
+            button1.Location = new Point(pBoxTablero.Size.Width + 18, 12);
+            button2.Location = new Point(pBoxTablero.Size.Width + 18, 35);
         }
 
         private void JuegoView_Load(object sender, EventArgs e) {
@@ -65,7 +59,6 @@ namespace Narnia {
                 ini = ini.Sig;
                 cabeza = llenarNodo(cabeza, ini);
             }
-            //Iniciar();
         }
 
         private Nodo llenarNodo(Nodo cabeza, Fila fila) {
@@ -164,20 +157,11 @@ namespace Narnia {
                     setDato(i, j, CrearCelda((i * casillaSize), (j * casillaSize)));
                 }
             }
-            //for (int i = 0;i < laberintoSize;i++) {
-            //    for (int j = 0;j < laberintoSize;j++) {
-            //        Celda celda = CrearCelda((i * casillaSize), (j * casillaSize));
-            //        int numX = i * casillaSize;
-            //        int numY = j * casillaSize;
-            //        mat[i, j] = celda;
-            //        //dibujarParedes(celda);
-            //    }
-            //}
             Celda inicio = getDato(0,0);
             inicio.Visitada = true;
             camino.Push(inicio);
             CrearLaberinto();
-            dibujarLaberinto();
+            DibujarLaberinto();
         }
 
         private void dibujarParedes(Celda celda) {
@@ -200,21 +184,6 @@ namespace Narnia {
             this.Size = new Size(tamano * laberSize, tamano * laberSize);
         }
 
-        private Label CrearLabel(int x, int y, int i) {
-            Label lbl1 = new Label {
-                Text = "nel" + i,
-                Location = new Point(x, y),
-                ForeColor = Color.Blue,
-                BackColor = Color.Transparent
-
-            };
-            lbl1.Click += (s, e) => {
-                Console.WriteLine(s.ToString());
-            };
-            lbl1.AutoSize = true;
-            return lbl1;
-        }
-
         private Celda CrearCelda(int x, int y) {
             Celda btn = new Celda {
                 PosX = x,
@@ -226,6 +195,11 @@ namespace Narnia {
 
         private void button1_Click_1(object sender, EventArgs e) {
             Iniciar();
+            AgregarPersonajes();
+            MoverPersonaje(bruja, 0, 0);
+            MoverPersonaje(leon, laberintoSize - 1 , laberintoSize - 1);
+            int mitad = laberintoSize / 2;
+            MoverPersonaje(ropero, mitad, mitad);
         }
 
         private void timer1_Tick(object sender, EventArgs e) {
@@ -234,6 +208,7 @@ namespace Narnia {
 
         private void button2_Click(object sender, EventArgs e) {
             //tablero.Clear(Color.White);
+            avanzar(leon,0);
         }
 
         public void CrearLaberinto() {
@@ -248,13 +223,10 @@ namespace Narnia {
                         // Norte
                         case 1:
                             if ((actual.PosY / casillaSize) - 1 >= 0) {
-                                //Celda siguiente = mat[actual.PosX / casillaSize, (actual.PosY / casillaSize) - 1];
                                 Celda siguiente = getDato(actual.PosX / casillaSize, (actual.PosY / casillaSize) - 1);
                                 if (!siguiente.Visitada) {
                                     siguiente.paredSur = false;
                                     actual.paredNorte = false;
-                                    //mat[actual.PosX / casillaSize, actual.PosY / casillaSize - 1] = siguiente;
-                                    //mat[actual.PosX / casillaSize, actual.PosY / casillaSize ] = actual;
                                     siguiente.Visitada = true;
                                     camino.Push(siguiente);
                                     valid = true;
@@ -310,13 +282,82 @@ namespace Narnia {
             }
         }
 
-        private void dibujarLaberinto() {
-            tablero.Clear(Color.White);
+        private void DibujarLaberinto() {
+            pBoxTablero.Refresh();
             for (int i = 0;i < laberintoSize;i++) {
                 for (int j = 0;j < laberintoSize;j++) {
                     dibujarParedes(getDato(i,j));
                 }
             }
+            
+        }
+
+        private void AgregarPersonajes() {
+            string dir = Path.GetDirectoryName(Application.ExecutablePath);
+            string nombreArchivo;
+            nombreArchivo = Path.Combine(dir, @"..\..\Resources\witch.png");
+            bruja.Image = Image.FromFile(nombreArchivo);
+            bruja.SizeMode = PictureBoxSizeMode.StretchImage;
+            bruja.Size = new Size(casillaSize - 10, casillaSize - 10);
+            bruja.Location = new Point(5, 5);
+            pBoxTablero.Controls.Add(bruja);
+            nombreArchivo = Path.Combine(dir, @"..\..\Resources\lion.png");
+            leon.Image = Image.FromFile(nombreArchivo);
+            leon.Size = new Size(casillaSize - 10, casillaSize - 10);
+            leon.SizeMode = PictureBoxSizeMode.StretchImage;
+            leon.Location = new Point(5, 5);
+            pBoxTablero.Controls.Add(leon);
+            nombreArchivo = Path.Combine(dir, @"..\..\Resources\closet.png");
+            ropero.Image = Image.FromFile(nombreArchivo);
+            ropero.Size = new Size(casillaSize - 10, casillaSize - 10);
+            ropero.SizeMode = PictureBoxSizeMode.StretchImage;
+            ropero.Location = new Point(5, 5);
+            pBoxTablero.Controls.Add(ropero);
+        }
+
+        private void MoverPersonaje(Personaje personaje, int x, int y) {
+            personaje.PosX = (x * casillaSize) + 5;
+            personaje.PosY = (y * casillaSize) + 5;
+            personaje.Dibujar();
+        }
+
+        private void avanzar(Personaje personaje,int direction) {
+            int x = (personaje.PosX - 5) / casillaSize;
+            int y = (personaje.PosY - 5) / casillaSize;
+            Celda celda = getDato(x,y);
+            if (celda != null) {
+                switch (direction) {
+                    //Norte
+                    case 0:
+                        if (!celda.paredNorte) {
+                            MoverPersonaje(personaje, x, y - 1);
+                        }
+                        break;
+                    //Este
+                    case 1:
+                        if (!celda.paredEste) {
+                            MoverPersonaje(personaje, x + 1, y);
+                        }
+                        break;
+                    //Oeste
+                    case 2:
+                        if (!celda.paredOeste) {
+                            MoverPersonaje(personaje, x - 1, y);
+                        }
+                        break;
+                    //Sur
+                    case 3:
+                        if (!celda.paredSur) {
+                            MoverPersonaje(personaje, x, y + 1);
+                        }
+                        
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+            
         }
     }
 }
