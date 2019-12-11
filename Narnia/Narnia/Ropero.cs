@@ -42,16 +42,24 @@ namespace Narnia {
             nombres.Add("Zain");
         }
 
-        public Ropero(int numRatones) :this() {
+        public Ropero(int numRatones, int casillaSize) :this() {
             Random r = new Random();
             int num = 0;
             for (int i = 0;i < numRatones;i++) {
                 num = r.Next(0, nombres.Count);
                 string nombre = nombres[num];
-                ratones.Push(new Raton(nombre));
+                ratones.Push(new Raton(nombre,casillaSize, this.Location));
                 nombres.RemoveAt(num);
                 Console.WriteLine(nombre + " " + nombres.Count);
             }
+        }
+
+        public Raton SacarRaton() {
+            return this.ratones.Pop();
+        }
+
+        public bool IsEmpty() {
+            return ratones.Count() > 0;
         }
     }
 }

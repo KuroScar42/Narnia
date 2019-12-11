@@ -11,19 +11,20 @@ using System.Windows.Forms;
 
 namespace Narnia {
     public partial class JuegoForm : Form {
-        private readonly int laberintoSize = 9;
-        private readonly int casillaSize = 50;
+        private readonly int laberintoSize = 15;
+        private readonly int casillaSize = 45;
         private readonly int lapizWidth = 5;
-        Nodo cabeza = null;
+        private Nodo cabeza = null;
         // variables para dibujar
-        Graphics tablero;
-        Pen lapiz;
-        Random randGen;
-        Pila<Celda> camino; // es para crear el camino dentro del laberinto
+        private Graphics tablero;
+        private Pen lapiz;
+        private Random randGen;
+        private Pila<Celda> camino; // es para crear el camino dentro del laberinto
 
-        Bruja bruja;
-        Ropero ropero;
-        Leon leon;
+        private Bruja bruja;
+        private Ropero ropero;
+        private Leon leon;
+        private Boolean isPause = false;
 
         public JuegoForm() {
             InitializeComponent();
@@ -34,8 +35,9 @@ namespace Narnia {
             camino = new Pila<Celda>();
             randGen = new Random();
             bruja = new Bruja();
-            ropero = new Ropero(5);
+            ropero = new Ropero((laberintoSize / 2) + 1, casillaSize - 10);
             leon = new Leon();
+            RoperoTimer.Interval = (((laberintoSize * laberintoSize) * 1000) / 60) + 5000;
             // se añaden algunas caractristicas
             pBoxTablero.SizeChanged += PBoxTablero_SizeChanged;
             pBoxTablero.Size = new Size(laberintoSize * casillaSize, laberintoSize * casillaSize + 1);
@@ -145,7 +147,7 @@ namespace Narnia {
         }
 
         private int GetRandNum(int max) {
-            return randGen.Next(1, max);
+            return randGen.Next(1, max + 1);
         }
 
         private void Iniciar() {
@@ -159,6 +161,7 @@ namespace Narnia {
             }
             Celda inicio = getDato(0,0);
             inicio.Visitada = true;
+            isPause = false;
             camino.Push(inicio);
             CrearLaberinto();
             DibujarLaberinto();
@@ -200,15 +203,18 @@ namespace Narnia {
             MoverPersonaje(leon, laberintoSize - 1 , laberintoSize - 1);
             int mitad = laberintoSize / 2;
             MoverPersonaje(ropero, mitad, mitad);
+            this.Focus();
+            BrujaTimer.Start();
+            RoperoTimer.Start();
+            button1.Enabled = false;
+            button2.Enabled = false;
         }
 
-        private void timer1_Tick(object sender, EventArgs e) {
-            Console.WriteLine("nel");
-        }
+
+        
 
         private void button2_Click(object sender, EventArgs e) {
             //tablero.Clear(Color.White);
-            avanzar(leon,0);
         }
 
         public void CrearLaberinto() {
@@ -218,7 +224,7 @@ namespace Narnia {
                 int checks = 0;
                 while (!valid && checks < 10) {
                     checks++;
-                    int direccion = GetRandNum(5);
+                    int direccion = GetRandNum(4);
                     switch (direccion) {
                         // Norte
                         case 1:
@@ -328,29 +334,28 @@ namespace Narnia {
             if (celda != null) {
                 switch (direction) {
                     //Norte
-                    case 0:
+                    case 1:
                         if (!celda.paredNorte) {
                             MoverPersonaje(personaje, x, y - 1);
                         }
                         break;
                     //Este
-                    case 1:
+                    case 2:
                         if (!celda.paredEste) {
                             MoverPersonaje(personaje, x + 1, y);
                         }
                         break;
                     //Oeste
-                    case 2:
+                    case 3:
                         if (!celda.paredOeste) {
                             MoverPersonaje(personaje, x - 1, y);
                         }
                         break;
                     //Sur
-                    case 3:
+                    case 4:
                         if (!celda.paredSur) {
                             MoverPersonaje(personaje, x, y + 1);
                         }
-                        
                         break;
                     default:
                         break;
@@ -358,6 +363,100 @@ namespace Narnia {
                 }
             }
             
+        }
+
+        private void PausarJuego(Boolean pausa) {
+            if (pausa) {
+                BrujaTimer.Stop();
+                RoperoTimer.Stop();
+                
+            } else {
+                BrujaTimer.Start();
+                RoperoTimer.Start();
+            }
+            button1.Enabled = pausa;
+            button2.Enabled = pausa;
+        }
+
+
+        private void DetectarTecla(object sender, KeyEventArgs e) {
+            if (e.KeyData == Keys.P) {
+                isPause = !isPause;
+                PausarJuego(isPause);
+            }
+            if (!isPause) {
+                if (e.KeyData == Keys.Up) {
+                    avanzar(leon, 1);
+                } else if (e.KeyData == Keys.Right) {
+                    avanzar(leon, 2);
+                } else if (e.KeyData == Keys.Left) {
+                    avanzar(leon, 3);
+                } else if (e.KeyData == Keys.Down) {
+                    avanzar(leon, 4);
+                }
+            }
+        }
+        private void BrujaMovement(object sender, EventArgs e) {
+            List<int> lados = new List<int>();
+            int x = (bruja.PosX - 5) / casillaSize;
+            int y = (bruja.PosY - 5) / casillaSize;
+            Celda celda = getDato(x, y);
+            if (!celda.paredNorte) 
+                lados.Add(1);
+            if (!celda.paredEste) 
+                lados.Add(2);
+            if (!celda.paredOeste) 
+                lados.Add(3);
+            if (!celda.paredSur) 
+                lados.Add(4);
+            
+            int dir = GetRandNum(lados.Count());
+            avanzar(bruja, lados[dir - 1]);
+        }
+
+        private void RoperoAction(object sender, EventArgs e) {
+            if (ropero.IsEmpty()) {
+                List<int> lados = new List<int>();
+                int x = (ropero.PosX - 5) / casillaSize;
+                int y = (ropero.PosY - 5) / casillaSize;
+                Celda celda = getDato(x, y);
+                if (!celda.paredNorte)
+                    lados.Add(1);
+                if (!celda.paredEste)
+                    lados.Add(2);
+                if (!celda.paredOeste)
+                    lados.Add(3);
+                if (!celda.paredSur)
+                    lados.Add(4);
+
+                int dir = GetRandNum(lados.Count());
+                Raton raton = ropero.SacarRaton();
+                switch (dir) {
+                    //Norte
+                    case 1:
+                        pBoxTablero.Controls.Add(raton);
+                        MoverPersonaje(raton, x, y - 1);
+                        break;
+                    //Este
+                    case 2:
+                        pBoxTablero.Controls.Add(raton);
+                        MoverPersonaje(raton, x + 1, y);
+                        break;
+                    //Oeste
+                    case 3:
+                        pBoxTablero.Controls.Add(raton);
+                        MoverPersonaje(raton, x - 1, y);
+                        break;
+                    //Sur
+                    case 4:
+                        pBoxTablero.Controls.Add(raton);
+                        MoverPersonaje(raton, x, y + 1);
+                        break;
+                    default:
+                        break;
+
+                }
+            }
         }
     }
 }

@@ -27,16 +27,16 @@
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pBoxTablero = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.BrujaTimer = new System.Windows.Forms.Timer(this.components);
+            this.RoperoTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxTablero)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.BackgroundImage = global::Narnia.Properties.Resources.cecilie_johnsen_hk3695TrMZA_edited;
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.pBoxTablero);
             this.panel1.Controls.Add(this.button1);
@@ -56,6 +56,16 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // pBoxTablero
+            // 
+            this.pBoxTablero.Image = global::Narnia.Properties.Resources.cecilie_johnsen_hk3695TrMZA_edited;
+            this.pBoxTablero.Location = new System.Drawing.Point(12, 12);
+            this.pBoxTablero.Name = "pBoxTablero";
+            this.pBoxTablero.Size = new System.Drawing.Size(740, 697);
+            this.pBoxTablero.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pBoxTablero.TabIndex = 4;
+            this.pBoxTablero.TabStop = false;
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(758, 12);
@@ -66,20 +76,14 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // timer1
+            // BrujaTimer
             // 
-            this.timer1.Interval = 500;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.BrujaTimer.Interval = 500;
+            this.BrujaTimer.Tick += new System.EventHandler(this.BrujaMovement);
             // 
-            // pBoxTablero
+            // RoperoTimer
             // 
-            this.pBoxTablero.Image = global::Narnia.Properties.Resources.cecilie_johnsen_hk3695TrMZA_edited;
-            this.pBoxTablero.Location = new System.Drawing.Point(12, 12);
-            this.pBoxTablero.Name = "pBoxTablero";
-            this.pBoxTablero.Size = new System.Drawing.Size(740, 697);
-            this.pBoxTablero.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pBoxTablero.TabIndex = 4;
-            this.pBoxTablero.TabStop = false;
+            this.RoperoTimer.Tick += new System.EventHandler(this.RoperoAction);
             // 
             // JuegoForm
             // 
@@ -92,6 +96,7 @@
             this.Name = "JuegoForm";
             this.Text = "Narnia";
             this.Load += new System.EventHandler(this.JuegoView_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DetectarTecla);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pBoxTablero)).EndInit();
             this.ResumeLayout(false);
@@ -103,8 +108,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pBoxTablero;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer BrujaTimer;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Timer RoperoTimer;
     }
 }
 
