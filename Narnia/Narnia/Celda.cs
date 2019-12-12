@@ -22,6 +22,7 @@ namespace Narnia {
         private int posY;
 
         private Personaje personaje;
+        private Raton raton;
         private Boolean salida;
 
         public Celda() {
@@ -47,5 +48,6 @@ namespace Narnia {
 
         public Boolean Visitada { get => visitada; set => visitada = value; }
         internal Personaje Personaje { get => personaje; set => personaje = value; }
+        internal Raton Raton { get => raton; set => raton = value; }
     }
 }

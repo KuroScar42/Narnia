@@ -328,6 +328,16 @@ namespace Narnia {
             Celda celda = getDato(x, y);
             if (personaje is Bruja) {
                 if (!(celda.Personaje is Leon)) {
+                    if (celda.Raton is Raton)
+                    {
+                        string dir = Path.GetDirectoryName(Application.ExecutablePath);
+                        string nombreArchivo;
+                        ((Bruja)personaje).RatonesCongelados.Push((Raton)celda.Raton);
+                        ((Raton)celda.Raton).Estatua = true;
+                        ((Raton)celda.Raton).Movimiento.Enabled = false;
+                        nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat_freeze.png");
+                        ((Raton)celda.Raton).Image = Image.FromFile(nombreArchivo);
+                    }
                     int posX = (personaje.PosX - 5) / casillaSize;
                     int posY = (personaje.PosY - 5) / casillaSize;
                     Celda c = getDato(posX, posY);
@@ -339,6 +349,15 @@ namespace Narnia {
                 }
             }else if (personaje is Leon) {
                 if (!(celda.Personaje is Bruja)) {
+                    if (celda.Raton is Raton)
+                    {
+                        string dir = Path.GetDirectoryName(Application.ExecutablePath);
+                        string nombreArchivo;
+                        ((Raton)celda.Raton).Estatua = false;
+                        ((Raton)celda.Raton).Movimiento.Enabled = true;
+                        nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat.png");
+                        ((Raton)celda.Raton).Image = Image.FromFile(nombreArchivo);
+                    }
                     int posX = (personaje.PosX - 5) / casillaSize;
                     int posY = (personaje.PosY - 5) / casillaSize;
                     Celda c = getDato(posX, posY);
@@ -353,15 +372,15 @@ namespace Narnia {
                 personaje.PosY = (y * casillaSize) + 5;
                 personaje.Dibujar();
             } else if (personaje is Raton) {
-                if (!(celda.Personaje is Bruja) && !(celda.Personaje is Leon) && !(celda.Personaje is Raton)) {
+                if (!(celda.Personaje is Bruja) && !(celda.Personaje is Leon) && !(celda.Raton is Raton)) {
                     int posX = (personaje.PosX - 5) / casillaSize;
                     int posY = (personaje.PosY - 5) / casillaSize;
                     Celda c = getDato(posX, posY);
-                    c.Personaje = null;
+                    c.Raton = null;
                     personaje.PosX = (x * casillaSize) + 5;
                     personaje.PosY = (y * casillaSize) + 5;
                     personaje.Dibujar();
-                    celda.Personaje = personaje;
+                    celda.Raton = (Raton)personaje;
                 }
             }
 
