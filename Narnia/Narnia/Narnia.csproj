@@ -57,6 +57,7 @@
     <Compile Include="Cola.cs" />
     <Compile Include="Elemento.cs" />
     <Compile Include="Leon.cs" />
+    <Compile Include="Lista.cs" />
     <Compile Include="Nodo.cs" />
     <Compile Include="JuegoView.cs">
       <SubType>Form</SubType>

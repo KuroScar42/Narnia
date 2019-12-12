@@ -15,5 +15,18 @@ namespace Narnia {
         }
 
         internal Pila<Raton> RatonesCongelados { get => ratonesCongelados; set => ratonesCongelados = value; }
+
+        public void removerRaton(String nombre) {
+            Pila<Raton> auxiliar = new Pila<Raton>();
+            if (RatonesCongelados.Count() > 0) {
+                while (RatonesCongelados.Tope().Nombre != nombre) {
+                    auxiliar.Push(ratonesCongelados.Pop());
+                }
+                ratonesCongelados.Pop();
+                while (auxiliar.Tope() != null) {
+                    RatonesCongelados.Push(auxiliar.Pop());
+                }
+            }
+        }
     }
 }

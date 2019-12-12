@@ -59,7 +59,7 @@ namespace Narnia {
         }
 
         public bool IsEmpty() {
-            return ratones.Count() > 0;
+            return ratones.Count() == 0;
         }
     }
 }

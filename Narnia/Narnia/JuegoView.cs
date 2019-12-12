@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Narnia {
     public partial class JuegoForm : Form {
-        private readonly int laberintoSize = 15;
+        private readonly int laberintoSize = 9;
         private readonly int casillaSize = 45;
         private readonly int lapizWidth = 5;
         private Nodo cabeza = null;
@@ -25,7 +25,8 @@ namespace Narnia {
         private Ropero ropero;
         private Leon leon;
         private Boolean isPause = false;
-        List<Raton> ratonera;
+        private List<Raton> ratonera;
+        private int numeroRatones;
 
         public JuegoForm() {
             InitializeComponent();
@@ -36,7 +37,8 @@ namespace Narnia {
             camino = new Pila<Celda>();
             randGen = new Random();
             bruja = new Bruja();
-            ropero = new Ropero((laberintoSize / 2) + 1, casillaSize - 10);
+            numeroRatones = (laberintoSize / 2) + 1;
+            ropero = new Ropero(numeroRatones, casillaSize - 10);
             leon = new Leon();
             ratonera = new List<Raton>();
             RoperoTimer.Interval = (((laberintoSize * laberintoSize) * 1000) / 60) + 5000;
@@ -162,7 +164,7 @@ namespace Narnia {
                     setDato(i, j, CrearCelda((i * casillaSize), (j * casillaSize)));
                 }
             }
-            Celda inicio = getDato(0,0);
+            Celda inicio = getDato(0, 0);
             inicio.Visitada = true;
             isPause = false;
             camino.Push(inicio);
@@ -203,7 +205,7 @@ namespace Narnia {
             Iniciar();
             AgregarPersonajes();
             MoverPersonaje(bruja, 0, 0);
-            MoverPersonaje(leon, laberintoSize - 1 , laberintoSize - 1);
+            MoverPersonaje(leon, laberintoSize - 1, laberintoSize - 1);
             int mitad = laberintoSize / 2;
             MoverPersonaje(ropero, mitad, mitad);
             this.Focus();
@@ -214,7 +216,7 @@ namespace Narnia {
         }
 
 
-        
+
 
         private void button2_Click(object sender, EventArgs e) {
             //tablero.Clear(Color.White);
@@ -295,28 +297,31 @@ namespace Narnia {
             pBoxTablero.Refresh();
             for (int i = 0;i < laberintoSize;i++) {
                 for (int j = 0;j < laberintoSize;j++) {
-                    dibujarParedes(getDato(i,j));
+                    dibujarParedes(getDato(i, j));
                 }
             }
-            
+
         }
 
         private void AgregarPersonajes() {
             string dir = Path.GetDirectoryName(Application.ExecutablePath);
             string nombreArchivo;
             nombreArchivo = Path.Combine(dir, @"..\..\Resources\witch.png");
+            bruja = new Bruja();
             bruja.Image = Image.FromFile(nombreArchivo);
             bruja.SizeMode = PictureBoxSizeMode.StretchImage;
             bruja.Size = new Size(casillaSize - 10, casillaSize - 10);
             bruja.Location = new Point(5, 5);
             pBoxTablero.Controls.Add(bruja);
             nombreArchivo = Path.Combine(dir, @"..\..\Resources\lion.png");
+            leon = new Leon();
             leon.Image = Image.FromFile(nombreArchivo);
             leon.Size = new Size(casillaSize - 10, casillaSize - 10);
             leon.SizeMode = PictureBoxSizeMode.StretchImage;
             leon.Location = new Point(5, 5);
             pBoxTablero.Controls.Add(leon);
             nombreArchivo = Path.Combine(dir, @"..\..\Resources\closet.png");
+            ropero = new Ropero((laberintoSize / 2) + 1, casillaSize - 10);
             ropero.Image = Image.FromFile(nombreArchivo);
             ropero.Size = new Size(casillaSize - 10, casillaSize - 10);
             ropero.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -326,17 +331,19 @@ namespace Narnia {
 
         private void MoverPersonaje(Personaje personaje, int x, int y) {
             Celda celda = getDato(x, y);
-            if (personaje is Bruja) {
+            if (personaje is Bruja) { // validaciones de la bruja
                 if (!(celda.Personaje is Leon)) {
-                    if (celda.Raton is Raton)
-                    {
-                        string dir = Path.GetDirectoryName(Application.ExecutablePath);
-                        string nombreArchivo;
-                        ((Bruja)personaje).RatonesCongelados.Push((Raton)celda.Raton);
-                        ((Raton)celda.Raton).Estatua = true;
-                        ((Raton)celda.Raton).Movimiento.Enabled = false;
-                        nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat_freeze.png");
-                        ((Raton)celda.Raton).Image = Image.FromFile(nombreArchivo);
+                    if (celda.Raton is Raton) {
+                        if (!celda.Raton.Estatua) {
+                            string dir = Path.GetDirectoryName(Application.ExecutablePath);
+                            string nombreArchivo;
+                            ((Bruja)personaje).RatonesCongelados.Push((Raton)celda.Raton);
+                            ((Raton)celda.Raton).Estatua = true;
+                            ((Raton)celda.Raton).Movimiento.Enabled = false;
+                            nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat_freeze.png");
+                            ((Raton)celda.Raton).Image = Image.FromFile(nombreArchivo);
+                            
+                        }
                     }
                     int posX = (personaje.PosX - 5) / casillaSize;
                     int posY = (personaje.PosY - 5) / casillaSize;
@@ -346,17 +353,27 @@ namespace Narnia {
                     personaje.PosY = (y * casillaSize) + 5;
                     personaje.Dibujar();
                     celda.Personaje = personaje;
+                    if (numeroRatones - 1 == bruja.RatonesCongelados.Count()) {
+                        isPause = !isPause;
+                        PausarJuego(isPause);
+                        MessageBox.Show("Usted a Perdido por MANCO y ella nunca te va amar", "Nel", MessageBoxButtons.OK);
+                        pBoxTablero.Refresh();
+                        pBoxTablero.Controls.Clear();
+                    }
                 }
-            }else if (personaje is Leon) {
+            } else if (personaje is Leon) {// Validaciones del Leon
                 if (!(celda.Personaje is Bruja)) {
-                    if (celda.Raton is Raton)
-                    {
-                        string dir = Path.GetDirectoryName(Application.ExecutablePath);
-                        string nombreArchivo;
-                        ((Raton)celda.Raton).Estatua = false;
-                        ((Raton)celda.Raton).Movimiento.Enabled = true;
-                        nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat.png");
-                        ((Raton)celda.Raton).Image = Image.FromFile(nombreArchivo);
+                    if (celda.Raton is Raton) {
+                        if (celda.Raton.Estatua) {
+                            string dir = Path.GetDirectoryName(Application.ExecutablePath);
+                            string nombreArchivo;
+                            ((Raton)celda.Raton).Estatua = false;
+                            bruja.removerRaton(((Raton)celda.Raton).Nombre);
+                            leon.RatonesSalvados.Add(((Raton)celda.Raton).Nombre);
+                            ((Raton)celda.Raton).Movimiento.Enabled = true;
+                            nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat.png");
+                            ((Raton)celda.Raton).Image = Image.FromFile(nombreArchivo);
+                        }
                     }
                     int posX = (personaje.PosX - 5) / casillaSize;
                     int posY = (personaje.PosY - 5) / casillaSize;
@@ -367,11 +384,11 @@ namespace Narnia {
                     personaje.Dibujar();
                     celda.Personaje = personaje;
                 }
-            } else if(personaje is Ropero){
+            } else if (personaje is Ropero) {
                 personaje.PosX = (x * casillaSize) + 5;
                 personaje.PosY = (y * casillaSize) + 5;
                 personaje.Dibujar();
-            } else if (personaje is Raton) {
+            } else if (personaje is Raton) { // Validaciones de los Ratones
                 if (!(celda.Personaje is Bruja) && !(celda.Personaje is Leon) && !(celda.Raton is Raton)) {
                     int posX = (personaje.PosX - 5) / casillaSize;
                     int posY = (personaje.PosY - 5) / casillaSize;
@@ -386,10 +403,10 @@ namespace Narnia {
 
         }
 
-        private void avanzar(Personaje personaje,int direction) {
+        private void avanzar(Personaje personaje, int direction) {
             int x = (personaje.PosX - 5) / casillaSize;
             int y = (personaje.PosY - 5) / casillaSize;
-            Celda celda = getDato(x,y);
+            Celda celda = getDato(x, y);
             if (celda != null) {
                 switch (direction) {
                     //Norte
@@ -421,7 +438,7 @@ namespace Narnia {
 
                 }
             }
-            
+
         }
 
         private void PausarJuego(Boolean pausa) {
@@ -431,18 +448,18 @@ namespace Narnia {
                 foreach (Raton raton in ratonera) {
                     raton.Movimiento.Stop();
                 }
-                
+
             } else {
                 BrujaTimer.Start();
                 RoperoTimer.Start();
                 Timer t = new Timer();
                 float num = (2f / (float)ratonera.Count);
-                t.Interval = Convert.ToInt32( num * 1000f);
+                t.Interval = Convert.ToInt32(num * 1000f);
                 foreach (Raton raton in ratonera) {
-                    t.Tick += (a, b)=>{
+                    t.Tick += (a, b) => {
                         raton.Movimiento.Start();
                     };
-                    
+
                 }
                 t.Start();
             }
@@ -491,7 +508,7 @@ namespace Narnia {
         }
 
         private void RoperoAction(object sender, EventArgs e) {
-            if (ropero.IsEmpty()) {
+            if (!ropero.IsEmpty()) {
                 List<int> lados = new List<int>();
                 int x = (ropero.PosX - 5) / casillaSize;
                 int y = (ropero.PosY - 5) / casillaSize;
@@ -507,10 +524,11 @@ namespace Narnia {
 
                 int dir = GetRandNum(lados.Count());
                 Raton raton = ropero.SacarRaton();
-                raton.Movimiento.Tick += (s, ev) =>{
+                MoverPersonaje(raton, x, y);
+                raton.Movimiento.Tick += (s, ev) => {
                     moverAleatorio(raton);
                 };
-                
+
                 switch (lados[dir - 1]) {
                     //Norte
                     case 1:
