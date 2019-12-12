@@ -31,12 +31,14 @@
             this.button1 = new System.Windows.Forms.Button();
             this.BrujaTimer = new System.Windows.Forms.Timer(this.components);
             this.RoperoTimer = new System.Windows.Forms.Timer(this.components);
+            this.TamanoLaberinto = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxTablero)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.TamanoLaberinto);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.pBoxTablero);
             this.panel1.Controls.Add(this.button1);
@@ -85,6 +87,23 @@
             // 
             this.RoperoTimer.Tick += new System.EventHandler(this.RoperoAction);
             // 
+            // TamanoLaberinto
+            // 
+            this.TamanoLaberinto.FormattingEnabled = true;
+            this.TamanoLaberinto.Items.AddRange(new object[] {
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15"});
+            this.TamanoLaberinto.Location = new System.Drawing.Point(759, 71);
+            this.TamanoLaberinto.Name = "TamanoLaberinto";
+            this.TamanoLaberinto.Size = new System.Drawing.Size(99, 21);
+            this.TamanoLaberinto.TabIndex = 6;
+            this.TamanoLaberinto.Text = "Tamaño";
+            // 
             // JuegoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -111,6 +130,7 @@
         private System.Windows.Forms.Timer BrujaTimer;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer RoperoTimer;
+        private System.Windows.Forms.ComboBox TamanoLaberinto;
     }
 }
 

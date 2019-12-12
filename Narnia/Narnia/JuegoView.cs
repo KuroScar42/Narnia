@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Narnia {
     public partial class JuegoForm : Form {
-        private readonly int laberintoSize = 9;
+        private int laberintoSize = 9;
         private readonly int casillaSize = 45;
         private readonly int lapizWidth = 5;
         private Nodo cabeza = null;
@@ -31,6 +31,7 @@ namespace Narnia {
         public JuegoForm() {
             InitializeComponent();
             // se inicializan variables
+            TamanoLaberinto.SelectedIndex = 0;
             tablero = pBoxTablero.CreateGraphics();
             lapiz = new Pen(Color.FromKnownColor(KnownColor.YellowGreen));
             lapiz.Width = lapizWidth;
@@ -42,6 +43,8 @@ namespace Narnia {
             leon = new Leon();
             ratonera = new List<Raton>();
             RoperoTimer.Interval = (((laberintoSize * laberintoSize) * 1000) / 60) + 5000;
+            this.Location = new Point(0, 0);
+           
             // se añaden algunas caractristicas
             pBoxTablero.SizeChanged += PBoxTablero_SizeChanged;
             pBoxTablero.Size = new Size(laberintoSize * casillaSize, laberintoSize * casillaSize + 1);
@@ -54,9 +57,15 @@ namespace Narnia {
         private void PBoxTablero_SizeChanged(object sender, EventArgs e) {
             button1.Location = new Point(pBoxTablero.Size.Width + 18, 12);
             button2.Location = new Point(pBoxTablero.Size.Width + 18, 35);
+            TamanoLaberinto.Location = new Point(pBoxTablero.Size.Width + 18, 64);
         }
 
         private void JuegoView_Load(object sender, EventArgs e) {
+            InicializarMatriz();
+        }
+
+        private void InicializarMatriz() {
+            cabeza = null;
             for (int i = 0;i < laberintoSize;i++) {
                 Fila ini = new Fila();
                 for (int j = 0;j < laberintoSize;j++) {
@@ -202,6 +211,14 @@ namespace Narnia {
         }
 
         private void button1_Click_1(object sender, EventArgs e) {
+            laberintoSize = Convert.ToInt32(TamanoLaberinto.SelectedItem);
+            RoperoTimer.Interval = (((laberintoSize * laberintoSize) * 1000) / 60) + 5000;
+            numeroRatones = (laberintoSize / 2) + 1;
+            ropero = new Ropero(numeroRatones, casillaSize - 10);
+            pBoxTablero.Size = new Size(laberintoSize * casillaSize, laberintoSize * casillaSize + 1);
+            this.Size = new Size(laberintoSize * casillaSize + 144, laberintoSize * casillaSize + 65);
+            this.Location = new Point(0, 0);
+            InicializarMatriz();
             Iniciar();
             AgregarPersonajes();
             MoverPersonaje(bruja, 0, 0);
@@ -213,6 +230,7 @@ namespace Narnia {
             RoperoTimer.Start();
             button1.Enabled = false;
             button2.Enabled = false;
+            TamanoLaberinto.Enabled = false;
         }
 
 
@@ -465,6 +483,7 @@ namespace Narnia {
             }
             button1.Enabled = pausa;
             button2.Enabled = pausa;
+            TamanoLaberinto.Enabled = pausa;
         }
 
 
