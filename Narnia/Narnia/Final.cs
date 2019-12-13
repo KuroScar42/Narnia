@@ -25,6 +25,7 @@ namespace Narnia {
 
             for (int i = 0;i < ratones_Bruja.Count();i++) {
                 Label nombre = new Label();
+                nombre.BackColor = Color.DimGray;
                 nombre.ForeColor = Color.White;
                 nombre.Visible = true;
                 nombre.AutoSize = true;
@@ -34,11 +35,12 @@ namespace Narnia {
 
             for (int i = 0;i < ratones_Leon.Count();i++) {
                 Label nombre = new Label();
+                nombre.BackColor = Color.DimGray;
                 nombre.ForeColor = Color.White;
                 nombre.Visible = true;
                 nombre.AutoSize = true;
                 nombre.Text = ratones_Leon.getDato();
-                RatonesCongelados.Controls.Add(nombre);
+                RatonesSalvados.Controls.Add(nombre);
             }
 
         }

@@ -429,11 +429,11 @@ namespace Narnia {
                             bruja.removerRaton(((Raton)celda.Raton).Nombre);
                             for (int i = 0;i < nomRats.Controls.Count;i++) {
                                 if (((Label)nomRats.Controls[i]).Text == ((Raton)celda.Raton).Nombre) {
-                                    Console.WriteLine(nomRats.Controls[i]);
+                                    //Console.WriteLine(nomRats.Controls[i]);
                                     nomRats.Controls.Remove(nomRats.Controls[i]);
                                 }
                             }
-                            leon.RatonesSalvados.Add(((Raton)celda.Raton).Nombre);
+                            leon.RatonesSalvados.Add(celda.Raton.Nombre);
                             ((Raton)celda.Raton).Movimiento.Enabled = true;
                             nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat.png");
                             ((Raton)celda.Raton).Image = Image.FromFile(nombreArchivo);
@@ -549,8 +549,12 @@ namespace Narnia {
                 BrujaTimer.Start();
                 RoperoTimer.Start();
                 Timer t = new Timer();
-                float num = (2f / (float)ratonera.Count);
-                t.Interval = Convert.ToInt32(num * 1000f);
+                if (ratonera.Count() == 0) {
+                    t.Interval = 10000;
+                } else {
+                    float num = (2f / (float)ratonera.Count);
+                    t.Interval = Convert.ToInt32(num * 1000f);
+                }
                 foreach (Raton raton in ratonera) {
                     t.Tick += (a, b) => {
                         raton.Movimiento.Start();
