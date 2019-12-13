@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Narnia {
-    class Lista<T>: Elemento<T> {
+    public class Lista<T>: Elemento<T> {
 
         private Elemento<T> ini = null;
 
@@ -54,6 +54,16 @@ namespace Narnia {
                 }
             } else {
                 throw new NullReferenceException();
+            }
+        }
+
+        public T getDato() {
+            if (ini == null) {
+                return default(T);
+            } else {
+                Elemento<T> aux = ini;
+                ini = ini.Sig;
+                return aux.Dato;
             }
         }
 

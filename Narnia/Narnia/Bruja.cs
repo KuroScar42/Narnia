@@ -8,13 +8,16 @@ namespace Narnia {
     class Bruja : Personaje{
         //pila para los ratones que se van congelando
         private Pila<Raton> ratonesCongelados;
+        private Pila<String> nombres_Ratones;
 
 
         public Bruja() {
             RatonesCongelados = new Pila<Raton>();
+            nombres_Ratones = new Pila<string>();
         }
 
         internal Pila<Raton> RatonesCongelados { get => ratonesCongelados; set => ratonesCongelados = value; }
+        internal Pila<string> Nombres_Ratones { get => nombres_Ratones; set => nombres_Ratones = value; }
 
         public void removerRaton(String nombre) {
             Pila<Raton> auxiliar = new Pila<Raton>();

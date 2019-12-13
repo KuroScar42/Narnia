@@ -9,7 +9,7 @@ namespace Narnia {
     /// Es una clase creada para manejar Pilas más sencillamente
     /// </summary>
     /// <typeparam name="T"> El tipo que se desea guardar en la pila</typeparam>
-    class Pila<T> : Elemento<T> {
+    public class Pila<T> : Elemento<T> {
 
         private Elemento<T> ini = null;
 

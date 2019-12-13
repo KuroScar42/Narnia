@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Narnia {
-    class Elemento<T> {
+    public class Elemento<T> {
         T dato;
         Elemento<T> sig = null;
 

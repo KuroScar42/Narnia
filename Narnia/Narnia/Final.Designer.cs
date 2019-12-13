@@ -46,6 +46,8 @@
             // 
             // RatonesCongelados
             // 
+            this.RatonesCongelados.BackgroundImage = global::Narnia.Properties.Resources.dim_gray;
+            this.RatonesCongelados.ForeColor = System.Drawing.Color.White;
             this.RatonesCongelados.Location = new System.Drawing.Point(6, 19);
             this.RatonesCongelados.Name = "RatonesCongelados";
             this.RatonesCongelados.Size = new System.Drawing.Size(764, 137);
@@ -65,6 +67,7 @@
             // 
             // RatonesSalvados
             // 
+            this.RatonesSalvados.BackgroundImage = global::Narnia.Properties.Resources.dim_gray;
             this.RatonesSalvados.Location = new System.Drawing.Point(6, 19);
             this.RatonesSalvados.Name = "RatonesSalvados";
             this.RatonesSalvados.Size = new System.Drawing.Size(764, 137);
@@ -78,6 +81,7 @@
             this.volverButton.TabIndex = 2;
             this.volverButton.Text = "Menú Principal";
             this.volverButton.UseVisualStyleBackColor = true;
+            this.volverButton.Click += new System.EventHandler(this.volverButton_Click);
             // 
             // Final
             // 

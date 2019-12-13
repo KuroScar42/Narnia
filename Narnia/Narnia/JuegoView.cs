@@ -53,7 +53,7 @@ namespace Narnia {
             // se añaden algunas caractristicas
             pBoxTablero.SizeChanged += PBoxTablero_SizeChanged;
             pBoxTablero.Size = new Size(laberintoSize * casillaSize, laberintoSize * casillaSize + 1);
-            this.Size = new Size(laberintoSize * casillaSize + 200, laberintoSize * casillaSize + 65);
+            this.Size = new Size(laberintoSize * casillaSize + 210, laberintoSize * casillaSize + 65);
             
 
 
@@ -62,9 +62,11 @@ namespace Narnia {
         }
 
         private void PBoxTablero_SizeChanged(object sender, EventArgs e) {
-            button1.Location = new Point(pBoxTablero.Size.Width + 18, 12);
-            button2.Location = new Point(pBoxTablero.Size.Width + 18, 35);
-            TamanoLaberinto.Location = new Point(pBoxTablero.Size.Width + 18, 64);
+            button1.Location = new Point(pBoxTablero.Size.Width + 50, 12);
+            button2.Location = new Point(pBoxTablero.Size.Width + 50, 35);
+            TamanoLaberinto.Location = new Point(pBoxTablero.Size.Width + 50, 64);
+            contenedor.Location = new Point(pBoxTablero.Size.Width + 18, 87);
+            contenedor.Size = new Size(contenedor.Width,pBoxTablero.Height - 75);
         }
 
         private void cerrarPrograma(Object sender,FormClosingEventArgs e) {
@@ -227,7 +229,7 @@ namespace Narnia {
             numeroRatones = (laberintoSize / 2) + 1;
             ropero = new Ropero(numeroRatones, casillaSize - 10);
             pBoxTablero.Size = new Size(laberintoSize * casillaSize, laberintoSize * casillaSize + 1);
-            this.Size = new Size(laberintoSize * casillaSize + 200, laberintoSize * casillaSize + 65);
+            this.Size = new Size(laberintoSize * casillaSize + 210, laberintoSize * casillaSize + 65);
             this.Location = new Point(0, 0);
             numRatones_Salieron = 0;
             InicializarMatriz();
@@ -249,9 +251,11 @@ namespace Narnia {
 
 
         private void button2_Click(object sender, EventArgs e) {
-            this.Close();
-            Application.OpenForms[0].Show();
-            
+            Inicio inicio = new Inicio();
+            inicio.Show();
+            this.Hide();
+            Console.WriteLine(Application.OpenForms.Count);
+
             //Final final = new Final();
             //final.ShowDialog();
         }
@@ -365,7 +369,7 @@ namespace Narnia {
             nombreArchivo = Path.Combine(dir, @"..\..\Resources\closet.png");
             ropero = new Ropero((laberintoSize / 2) + 1, casillaSize - 10);
             ropero.Image = Image.FromFile(nombreArchivo);
-            ropero.Size = new Size(casillaSize - 10, casillaSize - 10);
+            ropero.Size = new Size(casillaSize - 10, casillaSize - 10); 
             ropero.SizeMode = PictureBoxSizeMode.StretchImage;
             ropero.Location = new Point(5, 5);
             pBoxTablero.Controls.Add(ropero);
@@ -380,6 +384,15 @@ namespace Narnia {
                             string dir = Path.GetDirectoryName(Application.ExecutablePath);
                             string nombreArchivo;
                             ((Bruja)personaje).RatonesCongelados.Push((Raton)celda.Raton);
+                            ((Bruja)personaje).Nombres_Ratones.Push(((Raton)celda.Raton).Nombre);
+                            Label nombre = new Label();
+                            nombre.ForeColor = Color.White;
+                            nombre.Visible = true;
+                            nombre.AutoSize=true;
+                            nombre.Text = ((Raton)celda.Raton).Nombre;
+                            nomRats.Controls.Add(nombre);
+                            Console.WriteLine(nomRats.Controls.Count);
+                            nomRats.Refresh();
                             ((Raton)celda.Raton).Estatua = true;
                             ((Raton)celda.Raton).Movimiento.Enabled = false;
                             nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat_freeze.png");
@@ -414,6 +427,12 @@ namespace Narnia {
                             string nombreArchivo;
                             ((Raton)celda.Raton).Estatua = false;
                             bruja.removerRaton(((Raton)celda.Raton).Nombre);
+                            for (int i = 0;i < nomRats.Controls.Count;i++) {
+                                if (((Label)nomRats.Controls[i]).Text == ((Raton)celda.Raton).Nombre) {
+                                    Console.WriteLine(nomRats.Controls[i]);
+                                    nomRats.Controls.Remove(nomRats.Controls[i]);
+                                }
+                            }
                             leon.RatonesSalvados.Add(((Raton)celda.Raton).Nombre);
                             ((Raton)celda.Raton).Movimiento.Enabled = true;
                             nombreArchivo = Path.Combine(dir, @"..\..\Resources\rat.png");
@@ -464,6 +483,9 @@ namespace Narnia {
             PausarJuego(isPause);
             MessageBox.Show("Usted a Perdido la partida, la mayoria de los ratones han sido congelados", "Game Over", MessageBoxButtons.OK); pBoxTablero.Refresh();
             pBoxTablero.Controls.Clear();
+            this.Hide();
+            Final final= new Final(leon.RatonesSalvados, bruja.Nombres_Ratones);
+            final.Show();
         }
 
         private void Victoria() {
@@ -472,6 +494,9 @@ namespace Narnia {
             MessageBox.Show("Usted a ganado la partida, todos los ratones han sido liberados", "Game End", MessageBoxButtons.OK);
             pBoxTablero.Refresh();
             pBoxTablero.Controls.Clear();
+            this.Hide();
+            Final final = new Final(leon.RatonesSalvados, bruja.Nombres_Ratones);
+            final.Show();
         }
 
         private void avanzar(Personaje personaje, int direction) {

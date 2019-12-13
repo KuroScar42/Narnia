@@ -32,8 +32,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.pBoxTablero = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.contenedor = new System.Windows.Forms.GroupBox();
+            this.nomRats = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxTablero)).BeginInit();
+            this.contenedor.SuspendLayout();
             this.SuspendLayout();
             // 
             // BrujaTimer
@@ -49,6 +52,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.DimGray;
             this.panel1.BackgroundImage = global::Narnia.Properties.Resources.dim_gray;
+            this.panel1.Controls.Add(this.contenedor);
             this.panel1.Controls.Add(this.TamanoLaberinto);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.pBoxTablero);
@@ -106,6 +110,24 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // contenedor
+            // 
+            this.contenedor.Controls.Add(this.nomRats);
+            this.contenedor.ForeColor = System.Drawing.Color.Aqua;
+            this.contenedor.Location = new System.Drawing.Point(759, 87);
+            this.contenedor.Name = "contenedor";
+            this.contenedor.Size = new System.Drawing.Size(176, 351);
+            this.contenedor.TabIndex = 7;
+            this.contenedor.TabStop = false;
+            this.contenedor.Text = "Ratones Capturados por la Bruja";
+            // 
+            // nomRats
+            // 
+            this.nomRats.Location = new System.Drawing.Point(6, 19);
+            this.nomRats.Name = "nomRats";
+            this.nomRats.Size = new System.Drawing.Size(164, 326);
+            this.nomRats.TabIndex = 0;
+            // 
             // JuegoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -121,6 +143,7 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DetectarTecla);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pBoxTablero)).EndInit();
+            this.contenedor.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -134,6 +157,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer RoperoTimer;
         private System.Windows.Forms.ComboBox TamanoLaberinto;
+        private System.Windows.Forms.GroupBox contenedor;
+        private System.Windows.Forms.FlowLayoutPanel nomRats;
     }
 }
 

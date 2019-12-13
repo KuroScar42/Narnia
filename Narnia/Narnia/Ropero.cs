@@ -50,7 +50,6 @@ namespace Narnia {
                 string nombre = nombres[num];
                 ratones.Push(new Raton(nombre,casillaSize));
                 nombres.RemoveAt(num);
-                Console.WriteLine(nombre + " " + nombres.Count);
             }
         }
 
