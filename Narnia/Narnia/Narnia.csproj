@@ -56,6 +56,18 @@
     </Compile>
     <Compile Include="Cola.cs" />
     <Compile Include="Elemento.cs" />
+    <Compile Include="Final.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Final.Designer.cs">
+      <DependentUpon>Final.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Inicio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Inicio.Designer.cs">
+      <DependentUpon>Inicio.cs</DependentUpon>
+    </Compile>
     <Compile Include="Leon.cs" />
     <Compile Include="Lista.cs" />
     <Compile Include="Nodo.cs" />
@@ -72,6 +84,12 @@
     <Compile Include="Fila.cs" />
     <Compile Include="Raton.cs" />
     <Compile Include="Ropero.cs" />
+    <EmbeddedResource Include="Final.resx">
+      <DependentUpon>Final.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Inicio.resx">
+      <DependentUpon>Inicio.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="JuegoView.resx">
       <DependentUpon>JuegoView.cs</DependentUpon>
     </EmbeddedResource>
@@ -103,6 +121,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cecilie-johnsen-hk3695TrMZA-edited.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Diseño sin título.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Diseño sin título1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dim gray.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

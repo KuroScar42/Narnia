@@ -31,7 +31,7 @@ namespace Narnia {
             paredOeste = true;
             paredSur = true;
             visitada = false;
-            salida = false;
+            Salida = false;
         }
         public Celda(int x, int y) :this(){
             //paredNorte = true;
@@ -47,6 +47,7 @@ namespace Narnia {
         public int PosY { get => posY; set => posY = value; }
 
         public Boolean Visitada { get => visitada; set => visitada = value; }
+        public bool Salida { get => salida; set => salida = value; }
         internal Personaje Personaje { get => personaje; set => personaje = value; }
         internal Raton Raton { get => raton; set => raton = value; }
     }

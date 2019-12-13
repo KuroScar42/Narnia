@@ -25,19 +25,30 @@
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
+            this.BrujaTimer = new System.Windows.Forms.Timer(this.components);
+            this.RoperoTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.TamanoLaberinto = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
             this.pBoxTablero = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.BrujaTimer = new System.Windows.Forms.Timer(this.components);
-            this.RoperoTimer = new System.Windows.Forms.Timer(this.components);
-            this.TamanoLaberinto = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxTablero)).BeginInit();
             this.SuspendLayout();
             // 
+            // BrujaTimer
+            // 
+            this.BrujaTimer.Interval = 500;
+            this.BrujaTimer.Tick += new System.EventHandler(this.BrujaMovement);
+            // 
+            // RoperoTimer
+            // 
+            this.RoperoTimer.Tick += new System.EventHandler(this.RoperoAction);
+            // 
             // panel1
             // 
+            this.panel1.BackColor = System.Drawing.Color.DimGray;
+            this.panel1.BackgroundImage = global::Narnia.Properties.Resources.dim_gray;
             this.panel1.Controls.Add(this.TamanoLaberinto);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.pBoxTablero);
@@ -48,13 +59,30 @@
             this.panel1.Size = new System.Drawing.Size(1344, 721);
             this.panel1.TabIndex = 0;
             // 
+            // TamanoLaberinto
+            // 
+            this.TamanoLaberinto.FormattingEnabled = true;
+            this.TamanoLaberinto.Items.AddRange(new object[] {
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15"});
+            this.TamanoLaberinto.Location = new System.Drawing.Point(759, 71);
+            this.TamanoLaberinto.Name = "TamanoLaberinto";
+            this.TamanoLaberinto.Size = new System.Drawing.Size(99, 21);
+            this.TamanoLaberinto.TabIndex = 6;
+            this.TamanoLaberinto.Text = "Tamaño";
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(758, 41);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 23);
             this.button2.TabIndex = 5;
-            this.button2.Text = "Limpiar";
+            this.button2.Text = "Menu Pricipal";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -78,32 +106,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // BrujaTimer
-            // 
-            this.BrujaTimer.Interval = 500;
-            this.BrujaTimer.Tick += new System.EventHandler(this.BrujaMovement);
-            // 
-            // RoperoTimer
-            // 
-            this.RoperoTimer.Tick += new System.EventHandler(this.RoperoAction);
-            // 
-            // TamanoLaberinto
-            // 
-            this.TamanoLaberinto.FormattingEnabled = true;
-            this.TamanoLaberinto.Items.AddRange(new object[] {
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15"});
-            this.TamanoLaberinto.Location = new System.Drawing.Point(759, 71);
-            this.TamanoLaberinto.Name = "TamanoLaberinto";
-            this.TamanoLaberinto.Size = new System.Drawing.Size(99, 21);
-            this.TamanoLaberinto.TabIndex = 6;
-            this.TamanoLaberinto.Text = "Tamaño";
-            // 
             // JuegoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -114,6 +116,7 @@
             this.MinimumSize = new System.Drawing.Size(523, 430);
             this.Name = "JuegoForm";
             this.Text = "Narnia";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.cerrarPrograma);
             this.Load += new System.EventHandler(this.JuegoView_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DetectarTecla);
             this.panel1.ResumeLayout(false);
