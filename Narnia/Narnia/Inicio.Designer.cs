@@ -71,6 +71,7 @@
             this.DoubleBuffered = true;
             this.Name = "Inicio";
             this.Text = "Inicio";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CerrarPrograma);
             this.Load += new System.EventHandler(this.Inicio_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

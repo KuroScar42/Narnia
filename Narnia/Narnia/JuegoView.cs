@@ -70,7 +70,7 @@ namespace Narnia {
         }
 
         private void cerrarPrograma(Object sender,FormClosingEventArgs e) {
-            Application.OpenForms[0].Close();
+            Application.Exit();
         }
 
         private void JuegoView_Load(object sender, EventArgs e) {

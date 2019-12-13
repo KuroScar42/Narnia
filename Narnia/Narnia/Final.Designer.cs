@@ -94,6 +94,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "Final";
             this.Text = "Final";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CerrarPrograma);
             this.Load += new System.EventHandler(this.Final_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);

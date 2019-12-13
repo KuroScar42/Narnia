@@ -50,8 +50,17 @@ namespace Narnia {
         }
 
         private void volverButton_Click(object sender, EventArgs e) {
-            this.Close();
-            Application.OpenForms[0].Show();
+            foreach (Form item in Application.OpenForms) {
+                if (item is Inicio) {
+                    item.Show();
+                    break;
+                }
+            }
+            this.Hide();
+        }
+
+        private void CerrarPrograma(object sender, FormClosedEventArgs e) {
+            Application.Exit();
         }
     }
 }

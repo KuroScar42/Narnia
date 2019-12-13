@@ -51,5 +51,9 @@ namespace Narnia {
         private void btnSalir_OnMouseLeave(object sender, EventArgs e) {
             btnSalir.ForeColor = Color.White;
         }
+
+        private void CerrarPrograma(object sender, FormClosedEventArgs e) {
+            Application.Exit();
+        }
     }
 }
