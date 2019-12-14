@@ -604,8 +604,81 @@ namespace Narnia {
             if (!celda.paredSur)
                 lados.Add(4);
 
+            for (int i = 0; i < lados.Count; i++)
+            {
+                Celda cell;
+                switch (lados[i])
+                {
+                    //Norte
+                    case 1:
+                        cell = getDato(x, y-1);
+                        if (cell.Personaje != null)
+                        {
+                            if (cell.Personaje.Equals(leon))
+                            {
+                                lados.Remove(1);
+                            }
+                        }
+                        
+                        break;
+                    //Este
+                    case 2:
+                        cell = getDato(x + 1, y);
+                        if (cell.Personaje != null)
+                        {
+                            if (cell.Personaje.Equals(leon))
+                            {
+                                lados.Remove(2);
+                            }
+                        }
+                        
+                        break;
+                    //Oeste
+                    case 3:
+                        cell = getDato(x-1, y);
+                        if (cell.Personaje != null)
+                        {
+                            if (cell.Personaje.Equals(leon))
+                            {
+                                lados.Remove(3);
+                            }
+                        }
+                        
+                        break;
+                    //Sur
+                    case 4:
+                        cell= getDato(x, y + 1);
+                        if (cell.Personaje != null)
+                        {
+                            if (cell.Personaje.Equals(leon))
+                            {
+                                lados.Remove(4);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+
+            if(personaje is Bruja)
+            {
+                if (lados.Count == 0)
+                {
+                    int randomX, randomY;
+                    randomX = GetRandNum(laberintoSize-1);
+                    randomY = GetRandNum(laberintoSize-1);
+                    MoverPersonaje(personaje,randomX,randomY);
+                    return;
+                }
+            }
+
             int dir = GetRandNum(lados.Count());
-            avanzar(personaje, lados[dir - 1]);
+            if (lados.Count!=0)
+            {
+                avanzar(personaje, lados[dir - 1]);
+            }
         }
 
         private void RoperoAction(object sender, EventArgs e) {
