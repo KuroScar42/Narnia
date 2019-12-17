@@ -50,5 +50,13 @@ namespace Narnia {
             return default(T);
         }
 
+        public Boolean Empty() {
+            if (ini == null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
     }
 }

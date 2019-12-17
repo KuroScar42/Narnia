@@ -23,7 +23,7 @@ namespace Narnia {
             this.ratones_Leon = ratones_Leon;
             this.ratones_Bruja = ratones_Bruja;
 
-            for (int i = 0;i < ratones_Bruja.Count();i++) {
+            while(!ratones_Bruja.Empty()){
                 Label nombre = new Label();
                 nombre.BackColor = Color.DimGray;
                 nombre.ForeColor = Color.White;
@@ -33,7 +33,7 @@ namespace Narnia {
                 RatonesCongelados.Controls.Add(nombre);
             }
 
-            for (int i = 0;i < ratones_Leon.Count();i++) {
+            while(!ratones_Leon.Empty()) {
                 Label nombre = new Label();
                 nombre.BackColor = Color.DimGray;
                 nombre.ForeColor = Color.White;

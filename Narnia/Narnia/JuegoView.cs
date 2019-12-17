@@ -484,6 +484,8 @@ namespace Narnia {
             MessageBox.Show("Usted a Perdido la partida, la mayoria de los ratones han sido congelados", "Game Over", MessageBoxButtons.OK); pBoxTablero.Refresh();
             pBoxTablero.Controls.Clear();
             this.Hide();
+            Console.WriteLine("Salvados: " + leon.RatonesSalvados.Count());
+            Console.WriteLine("Congelados: " + bruja.Nombres_Ratones.Count());
             Final final= new Final(leon.RatonesSalvados, bruja.Nombres_Ratones);
             final.Show();
         }
@@ -495,6 +497,8 @@ namespace Narnia {
             pBoxTablero.Refresh();
             pBoxTablero.Controls.Clear();
             this.Hide();
+            Console.WriteLine("Salvados: " + leon.RatonesSalvados.Count());
+            Console.WriteLine("Congelados: " + bruja.Nombres_Ratones.Count());
             Final final = new Final(leon.RatonesSalvados, bruja.Nombres_Ratones);
             final.Show();
         }

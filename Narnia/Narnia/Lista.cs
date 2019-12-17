@@ -57,6 +57,7 @@ namespace Narnia {
             }
         }
 
+        //Elimina y devuelve el primer dato
         public T getDato() {
             if (ini == null) {
                 return default(T);
@@ -64,6 +65,14 @@ namespace Narnia {
                 Elemento<T> aux = ini;
                 ini = ini.Sig;
                 return aux.Dato;
+            }
+        }
+
+        public Boolean Empty() {
+            if (ini == null) {
+                return true;
+            } else {
+                return false;
             }
         }
 
